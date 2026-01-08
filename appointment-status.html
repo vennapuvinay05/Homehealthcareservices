@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Appointment Status</title>
+
+<style>
+body{
+    font-family: Segoe UI;
+    background:#f4f8fb;
+    margin:0;
+}
+
+/* TOP BAR */
+.topbar{
+    background:#1e3c72;
+    padding:12px 20px;
+}
+
+.home-link{
+    color:white;
+    text-decoration:none;
+    font-size:18px;
+    font-weight:600;
+}
+
+/* CONTENT */
+.container{
+    max-width:800px;
+    margin:40px auto;
+}
+
+.card{
+    background:white;
+    padding:18px;
+    border-radius:12px;
+    margin-bottom:15px;
+    box-shadow:0 6px 15px rgba(0,0,0,.1);
+}
+
+/* SUPPORT BUTTON */
+.support-btn{
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 60px;
+    height: 60px;
+    background:#1e3c72;
+    color:white;
+    font-size:28px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    box-shadow:0 8px 20px rgba(0,0,0,.3);
+    z-index:1000;
+}
+
+/* CHAT BOX */
+.chat-box{
+    position: fixed;
+    bottom: 95px;
+    right: 25px;
+    width: 330px;
+    height: 430px;
+    background:#fff;
+    border-radius:15px;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+    display:none;
+    flex-direction:column;
+    z-index:1000;
+}
+
+.chat-header{
+    background:#1e3c72;
+    color:#fff;
+    padding:12px;
+    border-radius:15px 15px 0 0;
+    font-weight:600;
+}
+
+.chat-body{
+    flex:1;
+    padding:10px;
+    overflow-y:auto;
+    background:#f4f8fb;
+}
+
+.chat-msg{
+    margin:8px 0;
+    padding:8px 12px;
+    border-radius:10px;
+    max-width:80%;
+    font-size:14px;
+}
+
+.user{
+    background:#1e3c72;
+    color:white;
+    margin-left:auto;
+}
+
+.bot{
+    background:#e0e0e0;
+}
+
+.chat-input{
+    display:flex;
+    border-top:1px solid #ddd;
+}
+
+.chat-input input{
+    flex:1;
+    padding:10px;
+    border:none;
+    outline:none;
+}
+
+.chat-input button{
+    background:#1e3c72;
+    color:white;
+    border:none;
+    padding:10px 15px;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="support-btn" onclick="toggleChat()">💬</div>
+
+<div class="chat-box" id="chatBox">
+    <div class="chat-header">Medical Home Care Support</div>
+    <div class="chat-body" id="chatBody">
+        <div class="chat-msg bot">
+            Hello 👋 How can I assist you today?
+        </div>
+    </div>
+    <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="Type your message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<div class="topbar">
+    <a class="home-link" href="{{ url_for('home') }}">🏠 Home</a>
+</div>
+
+<div class="container">
+<h2>Welcome, {{ username }}</h2>
+<h3>Your Appointment Status</h3>
+
+{% for b in bookings %}
+<div class="card">
+    <p><strong>Service:</strong> {{ b.service }}</p>
+    <p><strong>Date:</strong> {{ b.date }}</p>
+    <p>
+        <strong>Status:</strong>
+        <span style="color:{{ 'green' if b.status=='Accepted' else '#c0392b' }}">
+            {{ b.status }}
+        </span>
+    </p>
+</div>
+{% endfor %}
+</div>
+
+<script>
+function toggleChat(){
+    const box = document.getElementById("chatBox");
+    box.style.display = box.style.display === "flex" ? "none" : "flex";
+}
+
+/* 🔒 30 HIDDEN HOME HEALTH CARE QUESTIONS */
+function sendMessage(){
+    const input = document.getElementById("chatInput");
+    const text = input.value.trim();
+    if(!text) return;
+
+    const msg = text.toLowerCase();
+    const body = document.getElementById("chatBody");
+
+    body.innerHTML += `<div class="chat-msg user">${text}</div>`;
+    input.value = "";
+
+    let reply = "Please contact our medical support team for further assistance ☎️";
+
+    if(msg.includes("service")) reply = "We provide nursing, doctor visits, elderly care, physiotherapy, and lab services.";
+    else if(msg.includes("nurse")) reply = "Certified nurses are available for injections, wound care, and daily assistance.";
+    else if(msg.includes("doctor")) reply = "Doctors can visit your home for consultation and follow-ups.";
+    else if(msg.includes("elderly")) reply = "We provide complete elderly home care services.";
+    else if(msg.includes("physio")) reply = "Home physiotherapy is available for pain relief and recovery.";
+    else if(msg.includes("lab") || msg.includes("test")) reply = "Lab sample collection is available at home.";
+    else if(msg.includes("blood")) reply = "Blood sample collection can be done at your home.";
+    else if(msg.includes("emergency")) reply = "For emergencies, contact local emergency services immediately 🚑";
+    else if(msg.includes("book")) reply = "You can book services through our website or app.";
+    else if(msg.includes("cancel")) reply = "Please contact support to cancel or reschedule appointments.";
+    else if(msg.includes("reschedule")) reply = "Appointments can be rescheduled via support.";
+    else if(msg.includes("status")) reply = "Your appointment status is visible on this page.";
+    else if(msg.includes("medicine")) reply = "Nurses help with medication reminders and administration.";
+    else if(msg.includes("payment")) reply = "Payments can be made online or via cash after service.";
+    else if(msg.includes("cost") || msg.includes("price")) reply = "Service cost depends on care type and duration.";
+    else if(msg.includes("time")) reply = "Our services are available based on scheduled appointments.";
+    else if(msg.includes("24")) reply = "24/7 care services are available for selected plans.";
+    else if(msg.includes("night")) reply = "Night care nurses can be arranged upon request.";
+    else if(msg.includes("female nurse")) reply = "Female nurses are available based on request and availability.";
+    else if(msg.includes("male nurse")) reply = "Male nurses are available based on request.";
+    else if(msg.includes("post surgery")) reply = "Post-surgery care includes wound care and monitoring.";
+    else if(msg.includes("bedridden")) reply = "We provide special care for bedridden patients.";
+    else if(msg.includes("equipment")) reply = "Medical equipment rental support is available.";
+    else if(msg.includes("oxygen")) reply = "Oxygen support services can be arranged at home.";
+    else if(msg.includes("vaccination")) reply = "Home vaccination services are available.";
+    else if(msg.includes("diabetes")) reply = "We offer diabetes monitoring and insulin support.";
+    else if(msg.includes("bp") || msg.includes("blood pressure")) reply = "Blood pressure monitoring is available at home.";
+    else if(msg.includes("follow up")) reply = "Follow-up visits can be scheduled as needed.";
+
+    setTimeout(() => {
+        body.innerHTML += `<div class="chat-msg bot">${reply}</div>`;
+        body.scrollTop = body.scrollHeight;
+    }, 400);
+
+    body.scrollTop = body.scrollHeight;
+}
+</script>
+
+</body>
+</html>

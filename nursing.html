@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Nursing Care</title>
+
+<style>
+/* ---------- GLOBAL ---------- */
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f8fb;
+    padding:40px;
+    margin:0;
+}
+
+/* ---------- HEADER ---------- */
+.header{
+    background:linear-gradient(180deg,#1e3c72,#2a5298);
+    color:white;
+    padding:20px;
+    text-align:center;
+    border-radius:12px;
+    margin-bottom:30px;
+}
+
+.header h1{
+    margin:0;
+    font-size:32px;
+}
+
+/* ---------- CONTENT BOX ---------- */
+.box{
+    max-width:700px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+.box h2{
+    color:#1e3c72;
+    margin-bottom:10px;
+}
+
+ul{
+    margin-top:15px;
+    padding-left:20px;
+}
+
+ul li{
+    margin-bottom:8px;
+}
+
+/* ---------- BUTTON ---------- */
+button{
+    margin-top:20px;
+    padding:12px 20px;
+    background:#1e3c72;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+button a{
+    color:white;
+    text-decoration:none;
+    font-size:15px;
+}
+
+/* ---------- FOOTER ---------- */
+.footer{
+    background:linear-gradient(180deg,#1e3c72,#2a5298);
+    color:white;
+    padding:25px;
+    text-align:center;
+    border-radius:12px;
+    margin-top:40px;
+}
+
+.footer-icons a{
+    font-size:26px;
+    margin:0 12px;
+    text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ---------- HEADER ---------- -->
+<div class="header">
+    <h1>Healthcare Services</h1>
+</div>
+
+<!-- ---------- CONTENT ---------- -->
+<div class="box">
+    <h2>Nursing Care</h2>
+    <p>Professional nursing services provided at home.</p>
+
+    <ul>
+        <li>Vital signs monitoring</li>
+        <li>Medication administration</li>
+        <li>Post-surgery care</li>
+        <li>24/7 trained nurses</li>
+    </ul>
+
+    <p><strong>Price:</strong> ₹5000 / month</p>
+
+    <button>
+        <a href="{{ url_for('home') }}">Back to Home</a>
+    </button>
+</div>
+
+<!-- ---------- FOOTER ---------- -->
+<div class="footer">
+    <h3>Visit Us</h3>
+
+    <div class="footer-icons">
+        <a href="https://www.instagram.com/tvvha_healthservices/">📸</a>
+        <a href="https://youtube.com/@tvvhahomehealthcareservices">▶️</a>
+        <a href="#">✖️</a>
+    </div>
+
+    <p style="margin-top:10px;font-size:13px;">
+        © 2025 TVVHA Healthcare Services
+    </p>
+</div>
+
+</body>
+</html>

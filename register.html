@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Healthcare Registration</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    font-family:'Segoe UI',Tahoma;
+}
+body{
+    min-height:100vh;
+    background: url("{{ url_for('static', filename='healthcareback.jpg') }}") no-repeat center center fixed;
+    background-size: cover;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.container{
+    width:420px;
+    background:#fff;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+label{
+    font-weight:600;
+    margin-top:12px;
+    display:block;
+}
+input,select{
+    width:100%;
+    padding:12px;
+    margin-top:6px;
+    border:1px solid #ccc;
+    border-radius:8px;
+}
+button{
+    width:100%;
+    margin-top:20px;
+    padding:14px;
+    background:#1e88e5;
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+}
+.home-icon{
+    position:fixed;
+    top:20px;
+    left:20px;
+    font-size:24px;
+    color:#fff;
+    text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<a href="{{ url_for('home') }}" class="home-icon">🏠</a>
+
+<div class="container">
+<h2 style="text-align:center;">Healthcare Registration</h2>
+
+<form action="/register" method="post">
+
+<label>User Type</label>
+<select name="role" id="role" onchange="toggleFields()" required>
+    <option value="">Select</option>
+    <option value="Client">Client</option>
+    <option value="doctor">Doctor</option>
+    <option value="admin">Admin (Only for system use)</option>
+</select>
+
+<div id="fields" style="display:none;">
+
+<label>Username</label>
+<input type="text" name="username" required>
+
+<label>Password</label>
+<input type="password" name="password" required>
+
+<div id="clientFields" style="display:none;">
+    <label>Address</label>
+    <input type="text" name="address">
+
+    <label>Phone</label>
+    <input type="text" name="phone">
+</div>
+
+<div id="doctorFields" style="display:none;">
+    <label>Specialization</label>
+    <input type="text" name="specialization">
+</div>
+
+<button type="submit">Register</button>
+</div>
+
+</form>
+
+<p style="text-align:center;margin-top:15px;">
+Already registered? <a href="/login">Login</a>
+</p>
+</div>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <script>alert("{{ messages[0] }}");</script>
+  {% endif %}
+{% endwith %}
+
+<script>
+function toggleFields(){
+    const role = document.getElementById("role").value;
+
+    document.getElementById("fields").style.display = role ? "block" : "none";
+    document.getElementById("clientFields").style.display = role === "Client" ? "block" : "none";
+    document.getElementById("doctorFields").style.display = role === "doctor" ? "block" : "none";
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Bookings</title>
+
+<style>
+/* ---------- GLOBAL ---------- */
+body{
+    margin:0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(135deg,#e8f0ff,#f9fbff);
+}
+
+/* ---------- LAYOUT ---------- */
+.container{
+    display:flex;
+    min-height:100vh;
+}
+
+/* ---------- SIDEBAR ---------- */
+.sidebar{
+    width:230px;
+    background:linear-gradient(180deg,#1e3c72,#2a5298);
+    color:white;
+    padding:25px 20px;
+}
+
+.sidebar h2{
+    text-align:center;
+    margin-bottom:25px;
+    letter-spacing:1px;
+}
+
+.sidebar a{
+    display:block;
+    background:rgba(255,255,255,0.15);
+    color:white;
+    text-decoration:none;
+    padding:12px;
+    margin:12px 0;
+    border-radius:8px;
+    text-align:center;
+    transition:0.3s;
+}
+
+.sidebar a:hover{
+    background:#ffffff;
+    color:#1e3c72;
+    font-weight:bold;
+}
+
+/* ---------- CONTENT ---------- */
+.content{
+    flex:1;
+    padding:35px;
+}
+
+.content h2{
+    color:#1e3c72;
+    margin-bottom:10px;
+}
+
+/* ---------- BOOKINGS LIST ---------- */
+ul{
+    list-style:none;
+    padding:0;
+    max-width:700px;
+}
+
+li{
+    background:white;
+    padding:18px;
+    margin-bottom:15px;
+    border-radius:12px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 6px 15px rgba(0,0,0,0.1);
+}
+
+li span{
+    font-size:16px;
+    color:#333;
+}
+
+/* ---------- REMOVE BUTTON (ADDED) ---------- */
+.remove-btn{
+    background:#e74c3c;
+    color:white;
+    border:none;
+    padding:8px 14px;
+    border-radius:6px;
+    cursor:pointer;
+}
+.remove-btn:hover{
+    background:#c0392b;
+}
+
+/* ---------- EMPTY ---------- */
+.empty{
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    text-align:center;
+    color:#777;
+    max-width:500px;
+    box-shadow:0 6px 15px rgba(0,0,0,0.1);
+}
+</style>
+</head>
+
+<body onload="loadBookings()">
+
+<div class="container">
+
+<!-- ---------- SIDEBAR ---------- -->
+<aside class="sidebar">
+    <h2>Healthcare</h2>
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('services') }}">Services</a>
+    <a href="{{ url_for('bookings_page') }}">My Bookings</a>
+    <a href="{{ url_for('appointment_status') }}">Appointment Status</a>
+</aside>
+
+<!-- ---------- CONTENT ---------- -->
+<main class="content">
+    <h2>Bookings</h2>
+    <ul id="bookingList"></ul>
+</main>
+
+</div>
+
+<!-- ================= JAVASCRIPT ================= -->
+<script>
+/* EXISTING DATA (UNCHANGED) */
+const dbBookings = {{ bookings | tojson | safe }};
+const bookingList = document.getElementById("bookingList");
+
+function loadBookings(){
+    bookingList.innerHTML = "";
+
+    if (!dbBookings || dbBookings.length === 0) {
+        bookingList.innerHTML = `<div class="empty">No services booked yet.</div>`;
+        return;
+    }
+
+    dbBookings.forEach(b => {
+        bookingList.innerHTML += `
+            <li>
+                <span>
+                    <strong>${b.service}</strong><br>
+                    Doctor: ${b.doctor || "Assigned Soon"}<br>
+                    Date: ${b.date || "N/A"}<br>
+                    Status: ${b.status || "Pending"}
+                </span>
+
+                <!-- REMOVE BUTTON (ONLY ADDITION) -->
+                <button class="remove-btn"
+    onclick="removeBooking(${b.id})"
+    ${b.status === 'Accepted' ? 'disabled' : ''}>
+
+                    Remove
+                </button>
+            </li>
+        `;
+    });
+}
+
+/* DELETE BOOKING FUNCTION (ADDED) */
+function removeBooking(id){
+    if (!confirm("Are you sure you want to remove this booking?")) return;
+
+    fetch(`/delete-booking/${id}`, { method: "POST" })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message);
+            location.reload();
+        })
+        .catch(() => alert("Failed to remove booking"));
+}
+</script>
+
+</body>
+</html>

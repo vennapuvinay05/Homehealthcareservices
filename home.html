@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Home Healthcare Dashboard</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background: url("{{ url_for('static', filename='healthcareback.jpg') }}") no-repeat center center fixed;
+    background-size: cover;
+    padding:40px;
+    overflow-y:auto;
+}
+
+.container{
+    display:flex;
+    min-height:100vh;
+}
+
+.sidebar{
+    width:230px;
+    background:linear-gradient(180deg,#1e3c72,#2a5298);
+    color:white;
+    padding:25px 20px;
+    height: fit-content;
+    border-radius: 12px;
+}
+
+.sidebar h2{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.sidebar a{
+    display:block;
+    background:rgba(255,255,255,0.15);
+    color:white;
+    text-decoration:none;
+    padding:12px;
+    margin:12px 0;
+    border-radius:8px;
+    text-align:center;
+}
+
+.sidebar a:hover{
+    background:#ffffff;
+    color:#1e3c72;
+    font-weight:bold;
+}
+
+.content{
+    flex:1;
+}
+
+.content h1{
+    text-align:center;
+    font-size:38px;
+    color:#2c2c2c;
+    margin-bottom:40px;
+}
+
+.card-container{
+    display:flex;
+    gap:40px;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+
+.card{
+    width:260px;
+    background:#9a9785;
+    padding:20px;
+    border-radius:16px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.3);
+    transition: transform .4s ease, box-shadow .4s ease;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.card:hover{
+    transform: scale(1.08);
+    box-shadow:0 18px 40px rgba(0,0,0,0.4);
+}
+
+.card img{
+    width:100%;
+    height:160px;
+    border-radius:12px;
+    object-fit:cover;
+}
+
+.card h2{
+    margin-top:15px;
+    color:#7a1ea1;
+}
+
+.card p{
+    margin-top:10px;
+    color:#0d0710;
+    font-weight:bold;
+}
+
+/* ---------- FOOTER ---------- */
+.footer{
+    background: linear-gradient(180deg,#1e3c72,#2a5298);
+    color: white;
+    padding: 25px;
+    text-align: center;
+    border-radius: 12px;
+    margin-top:40px;
+}
+
+.footer-icons{
+    margin:12px 0;
+}
+
+.footer-icons a{
+    font-size:26px;
+    margin:0 12px;
+    text-decoration:none;
+    color:white;
+}
+
+.footer-icons a:hover{
+    transform:scale(1.2);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<aside class="sidebar">
+    <h2>Healthcare</h2>
+    <p>TVVHA health services</p>
+
+    <a href="/">Home</a>
+    <a href="/services">Services</a>
+    <a href="/bookings">Bookings</a>
+    <a href="{{ url_for('appointment_status') }}">Appointment Status</a>
+
+    {% if session.get('user') %}
+        <a href="/logout" style="background:#ff4d4d;">Logout</a>
+    {% else %}
+        <a href="/login">Login</a>
+        <a href="/register-page">Register</a>
+    {% endif %}
+</aside>
+
+<main class="content">
+
+<h1>Healthcare Services</h1>
+
+<div class="card-container">
+
+    <a class="card" href="/nursing">
+        <img src="{{ url_for('static', filename='nurseimage.jpg') }}">
+        <h2>Nursing Care</h2>
+        <p>Skilled nurses for daily medical support.</p>
+    </a>
+
+    <a class="card" href="/physiotherapy">
+        <img src="{{ url_for('static', filename='physioimage.jpg') }}">
+        <h2>Physiotherapy</h2>
+        <p>Expert care.</p>
+    </a>
+
+    <a class="card" href="/elder">
+        <img src="{{ url_for('static', filename='eldercare.jpg') }}">
+        <h2>Elder Care</h2>
+        <p>Comfort and safety.</p>
+    </a>
+
+    <a class="card" href="/lab">
+        <img src="{{ url_for('static', filename='labtests.jpg') }}">
+        <h2>Lab Tests</h2>
+        <p>Qualified support.</p>
+    </a>
+
+    <a class="card" href="/pregnent">
+        <img src="{{ url_for('static', filename='pregnent.jpg') }}">
+        <h2>Pregnant Care</h2>
+        <p>Skilled care.</p>
+    </a>
+
+    <a class="card" href="/fullbody">
+        <img src="{{ url_for('static', filename='fullbody.jpg') }}">
+        <h2>Full Body Checkup</h2>
+        <p>Expert technicians.</p>
+    </a>
+
+    <a class="card" href="/child">
+        <img src="{{ url_for('static', filename='child.jpg') }}">
+        <h2>Child Care</h2>
+        <p>Safety for children.</p>
+    </a>
+
+    <a class="card" href="/general">
+        <img src="{{ url_for('static', filename='gen.jpg') }}">
+        <h2>General Checkup</h2>
+        <p>Expert Doctors.</p>
+    </a>
+
+    <a class="card" href="/diabetic">
+        <img src="{{ url_for('static', filename='dia.jpg') }}">
+        <h2>Diabetic Care</h2>
+        <p>Regular monitoring.</p>
+    </a>
+
+</div>
+
+</main>
+</div>
+
+<footer class="footer">
+    <p><strong>TVVHA Healthcare</strong></p>
+    <p>Trusted home healthcare services</p>
+
+    <div class="footer-icons">
+        <a href="https://www.instagram.com/tvvha_healthservices/" title="Instagram">📸</a>
+        <a href="https://youtube.com/@tvvhahomehealthcareservices" title="YouTube">▶️</a>
+        <a href="#" title="Twitter X">✖️</a>
+    </div>
+
+    <p>© 2025 TVVHA Healthcare. All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>

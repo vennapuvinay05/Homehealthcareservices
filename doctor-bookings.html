@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Doctor — Customer Bookings</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Segoe UI, sans-serif;
+}
+
+body{
+    background:#f4f8fb;
+}
+
+.header{
+    background:#1e3c72;
+    color:white;
+    padding:18px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.header h2{
+    font-size:20px;
+}
+
+.container{
+    max-width:900px;
+    margin:25px auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+.booking{
+    border:1px solid #ddd;
+    border-radius:10px;
+    padding:15px;
+    margin-bottom:15px;
+}
+
+.booking strong{
+    color:#1e3c72;
+}
+
+.status{
+    margin-top:8px;
+    font-weight:600;
+}
+
+.accept-btn{
+    margin-top:10px;
+    padding:7px 10px;
+    border:none;
+    background:#28a745;
+    color:white;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.accept-btn:disabled{
+    background:#aaa;
+    cursor:not-allowed;
+}
+
+.back-btn{
+    text-decoration:none;
+    background:#667eea;
+    color:white;
+    padding:8px 14px;
+    border-radius:8px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h2>Doctor Dashboard — Customer Bookings</h2>
+
+    <a href="login" class="back-btn">Logout</a>
+</div>
+
+<div class="container">
+
+<h3>Patient Appointments</h3>
+<p style="margin:8px 0 18px; color:#555;">
+Bookings made by customers will appear here.
+</p>
+
+<div id="bookingsList"></div>
+
+</div>
+
+<script>
+fetch("/api/admin/bookings")
+.then(res => res.json())
+.then(bookings => {
+    const container = document.getElementById("bookingsList");
+    container.innerHTML = "";
+
+    if (bookings.length === 0){
+        container.innerHTML = "<p>No bookings yet.</p>";
+        return;
+    }
+
+    bookings.forEach(b => {
+        container.innerHTML += `
+            <div class="booking">
+                <p><strong>Patient:</strong> ${b.username}</p>
+                <p><strong>Service:</strong> ${b.service}</p>
+                <p><strong>Date:</strong> ${b.date}</p>
+
+                <p class="status">
+                    Status:
+                    <span style="color:${b.status === 'Accepted' ? 'green':'#c0392b'}">
+                        ${b.status}
+                    </span>
+                </p>
+
+                <button class="accept-btn"
+                    onclick="acceptBooking(${b.id})"
+                    ${b.status === 'Accepted' ? 'disabled' : ''}>
+                    Accept
+                </button>
+            </div>
+        `;
+    });
+});
+
+function acceptBooking(id){
+    fetch(`/api/doctor/accept/${id}`, { method:"POST" })
+    .then(() => location.reload());
+}
+</script>

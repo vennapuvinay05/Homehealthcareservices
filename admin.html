@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Panel</title>
+<style>
+/* ---------- RESET ---------- */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:"Segoe UI", Arial, sans-serif;
+    background:#f4f8fb;
+}
+
+/* ---------- LAYOUT ---------- */
+.container{
+    display:flex;
+    min-height:100vh;
+}
+
+/* ---------- SIDEBAR ---------- */
+.sidebar{
+    width:250px;
+    background:#1e3c72;
+    color:white;
+    padding:25px 20px;
+}
+
+/* SIDEBAR TITLE */
+.sidebar h2{
+    text-align:center;
+    font-size:24px;
+    font-weight:700;
+    margin-bottom:8px;
+    letter-spacing:1px;
+}
+
+/* SUB TITLE */
+.left-title{
+    text-align:center;
+    font-size:14px;
+    margin-bottom:30px;
+    color:#e2ebff;
+}
+
+/* MENU LIST */
+.sidebar ul{
+    list-style:none;
+}
+
+/* MENU ITEMS */
+.sidebar ul li{
+    margin:16px 0;
+}
+
+/* MENU LINKS – FREE & CLEAR */
+.sidebar a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    font-size:16px;
+    font-weight:600;
+    padding:10px 8px;
+    border-left:4px solid transparent;
+    transition:0.2s ease;
+}
+
+/* HOVER EFFECT */
+.sidebar a:hover{
+    border-left:4px solid #00e6b8;
+    padding-left:14px;
+    color:#00e6b8;
+}
+
+/* ---------- CONTENT ---------- */
+.content{
+    flex:1;
+    background-image:url("./healthcare back.jpg");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    padding:35px;
+}
+
+/* ---------- LIST ---------- */
+ul{
+    list-style:none;
+    max-width:650px;
+}
+
+li{
+    background:white;
+    padding:16px;
+    margin:14px 0;
+    border-radius:8px;
+    font-weight:600;
+    color:#1e3c72;
+}
+
+/* ---------- BUTTON ---------- */
+button{
+    background:#28a745;
+    color:white;
+    border:none;
+    padding:7px 14px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#218838;
+}
+
+/* ---------- HIDE ---------- */
+.section{
+    display:none;
+}
+</style>
+
+
+</head>
+
+<body onload="loadServices()">
+
+<div class="container">
+
+<!-- ---------- SIDEBAR ---------- -->
+<aside class="sidebar">
+    <h2>Admin</h2>
+    <a href="/home">Home</a>
+<a href="/services">Services</a>
+<a href="/bookings">bookings</a>
+<a href="/admin">Admin Panel</a>
+</aside>
+
+<!-- ---------- CONTENT ---------- -->
+<main class="content">
+    <h2>Admin Panel</h2>
+    <p>Add or manage healthcare services.</p>
+
+    <!-- ADD SERVICE FORM -->
+    <form onsubmit="addService(event)">
+        <input type="text" id="serviceName" placeholder="Service Name" required>
+        <input type="number" id="servicePrice" placeholder="Price (₹)" required>
+        <button type="submit">Add Service</button>
+    </form>
+
+    <!-- SERVICE LIST -->
+    <ul id="serviceList"></ul>
+</main>
+
+</div>
+
+<!-- ---------- SCRIPT ---------- -->
+<script>
+const serviceList = document.getElementById("serviceList");
+
+// Default services (first time only)
+const defaultServices = [
+    { name: "Nursing Care", price: 5000 },
+    { name: "Physiotherapy", price: 3000 },
+    { name: "Elder Care", price: 4000 },
+    { name: "Home Doctor Visit", price: 2500 },
+    { name: "Medical Equipment Rental", price: 2000 }
+];
+
+function getServices(){
+    let services = JSON.parse(localStorage.getItem("services"));
+    if(!services || services.length === 0){
+        services = defaultServices;
+        localStorage.setItem("services", JSON.stringify(services));
+    }
+    return services;
+}
+
+function loadServices(){
+    const services = getServices();
+    serviceList.innerHTML = "";
+
+    services.forEach((s, i) => {
+        serviceList.innerHTML += `
+            <li>
+                <span>${s.name} – ₹${s.price}</span>
+                <button class="delete-btn" onclick="deleteService(${i})">Delete</button>
+            </li>
+        `;
+    });
+}
+
+function addService(event){
+    event.preventDefault();
+
+    const name = document.getElementById("serviceName").value;
+    const price = document.getElementById("servicePrice").value;
+
+    let services = getServices();
+    services.push({ name, price });
+    localStorage.setItem("services", JSON.stringify(services));
+
+    event.target.reset();
+    loadServices();
+}
+
+function deleteService(index){
+    let services = getServices();
+    services.splice(index, 1);
+    localStorage.setItem("services", JSON.stringify(services));
+    loadServices();
+}
+</script>
+
+</body>
+</html>

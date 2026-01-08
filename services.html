@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Healthcare Services</title>
+
+<style>
+/* ---------- GLOBAL ---------- */
+body{
+    margin:0;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    background: linear-gradient(135deg,#eef4ff,#f9fcff);
+}
+
+/* ---------- LAYOUT ---------- */
+.container{
+    display:flex;
+    min-height:100vh;
+}
+
+/* ---------- SIDEBAR ---------- */
+.sidebar{
+    width:240px;
+    background:linear-gradient(180deg,#1e3c72,#2a5298);
+    color:white;
+    padding:25px 20px;
+    box-shadow:4px 0 15px rgba(0,0,0,0.15);
+}
+
+.sidebar h2{
+    text-align:center;
+    margin-bottom:30px;
+    font-size:22px;
+    letter-spacing:1px;
+}
+
+.sidebar a{
+    display:block;
+    background:rgba(255,255,255,0.15);
+    color:white;
+    text-decoration:none;
+    padding:12px;
+    margin:12px 0;
+    border-radius:10px;
+    text-align:center;
+    transition:0.3s ease;
+    font-weight:500;
+}
+
+.sidebar a:hover{
+    background:#ffffff;
+    color:#1e3c72;
+    transform:translateX(5px);
+}
+
+/* ---------- CONTENT ---------- */
+.content{
+    flex:1;
+    padding:40px;
+}
+
+.content h2{
+    color:#1e3c72;
+    margin-bottom:10px;
+    font-size:26px;
+}
+
+.content p{
+    color:#555;
+    margin-bottom:25px;
+}
+
+/* ---------- SERVICE LIST ---------- */
+ul{
+    list-style:none;
+    padding:0;
+    display:grid;
+    grid-template-columns: repeat(auto-fill,minmax(320px,1fr));
+    gap:20px;
+}
+
+li{
+    background:white;
+    padding:22px;
+    border-radius:16px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 8px 20px rgba(0,0,0,0.1);
+    transition:0.3s ease;
+}
+
+li:hover{
+    transform:translateY(-5px);
+    box-shadow:0 12px 28px rgba(0,0,0,0.15);
+}
+
+li span{
+    font-size:17px;
+    font-weight:600;
+    color:#2a5298;
+}
+
+/* ---------- BUTTON ---------- */
+button{
+    background:linear-gradient(135deg,#27ae60,#2ecc71);
+    color:white;
+    border:none;
+    padding:10px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:600;
+    transition:0.3s ease;
+}
+
+button:hover{
+    background:linear-gradient(135deg,#1e8449,#27ae60);
+    transform:scale(1.05);
+}
+.section-title{
+    margin:40px 0 8px;
+    color:#2a5298;
+    font-size:22px;
+}
+
+.section-desc{
+    color:#555;
+    font-size:15px;
+    margin-bottom:18px;
+    max-width:85%;
+}
+
+.service-desc{
+    font-size:14px;
+    color:#666;
+    margin-top:6px;
+    max-width:70%;
+}
+
+
+</style>
+
+</head>
+
+<body onload="loadServices()">
+
+<div class="container">
+
+<!-- ---------- SIDEBAR ---------- -->
+<aside class="sidebar">
+    <h2>Healthcare</h2>
+    <a href="/">Home</a>
+    <a href="/services">Services</a>
+    <a href="/bookings">My Bookings</a>
+
+</aside>
+
+<!-- ---------- CONTENT ---------- -->
+<main class="content">
+    <h2>Our Healthcare Services</h2>
+    <p>Select a service and book it easily.</p>
+    <br>
+    <!-- CHILD CARE -->
+    <h3 class="section-title">👶 Child Care Services</h3>
+    <p class="section-desc">
+        Professional and compassionate care focused on infants and children,
+        ensuring safety, hygiene, and healthy development at home.
+    </p>
+    <ul id="childCareList"></ul>
+
+    <!-- WOMEN & PREGNANCY CARE -->
+    <h3 class="section-title">🤰 Pregnant & Women Care Services</h3>
+    <p class="section-desc">
+        Specialized home healthcare services for women during pregnancy,
+        postnatal recovery, and overall maternal wellness.
+    </p>
+    <ul id="womenCareList"></ul>
+
+    <!-- ELDER CARE -->
+    <h3 class="section-title">👴 Elder Care Services</h3>
+    <p class="section-desc">
+        Dedicated support for senior citizens, focusing on comfort, mobility,
+        medical assistance, and emotional well-being.
+    </p>
+    <ul id="elderCareList"></ul>
+    <!-- GENERAL MEDICAL CARE -->
+<h3 class="section-title">🩺 General Medical & Nursing Care</h3>
+<ul id="medicalCareList"></ul>
+
+<!-- DOCTOR & DIAGNOSTICS -->
+<h3 class="section-title">👨‍⚕️ Doctor & Diagnostic Services</h3>
+<ul id="diagnosticCareList"></ul>
+
+<!-- MEDICAL EQUIPMENT -->
+<h3 class="section-title">🧰 Medical Equipment & Support</h3>
+<ul id="equipmentCareList"></ul>
+
+<!-- REHABILITATION & THERAPY -->
+<h3 class="section-title">🏃 Rehabilitation & Therapy Services</h3>
+<ul id="therapyCareList"></ul>
+
+</main>
+
+        <!-- Services loaded from JavaScript -->
+    </ul>
+
+
+</div>
+
+<!-- ---------- SCRIPT (REFERENCE FROM MAIN CODE) ---------- -->
+<script>
+const serviceList = document.getElementById("serviceList");
+
+// Default services (UI only)
+const services = [
+    { name: "Nursing Care", price: 5000 },
+    { name: "Physiotherapy", price: 3000 },
+    { name: "Elder Care", price: 4000 },
+    { name: "Home Doctor Visit", price: 2500 },
+    { name: "Medical Equipment Rental", price: 2000 }
+];
+
+function loadServices() {
+    serviceList.innerHTML = "";
+
+    services.forEach((s, i) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+            <span>${s.name} – ₹${s.price}</span>
+            <button onclick="book(${i})">Book</button>
+        `;
+        serviceList.appendChild(li);
+    });
+}
+
+function book(index) {
+    const service = services[index];
+
+    fetch("/book-service", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: service.name,
+            phone: "N/A",
+            service: service.name,
+            date: new Date().toISOString().split("T")[0],
+            doctor: "Assigned Soon"
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+        } else {
+            alert("Service booked successfully!");
+        }
+    })
+    .catch(() => alert("Server error while booking"));
+}
+
+window.onload = loadServices;
+
+/* ---------- GET LIST ELEMENTS ---------- */
+const childCareList = document.getElementById("childCareList");
+const womenCareList = document.getElementById("womenCareList");
+const elderCareList = document.getElementById("elderCareList");
+const medicalCareList = document.getElementById("medicalCareList");
+const diagnosticCareList = document.getElementById("diagnosticCareList");
+const equipmentCareList = document.getElementById("equipmentCareList");
+const therapyCareList = document.getElementById("therapyCareList");
+
+/* ---------- ALL HEALTHCARE SERVICES ---------- */
+const servicesData = {
+
+    /* 👶 CHILD CARE */
+    childCare: [
+        { name:"Newborn Baby Care", price:4500, desc:"Feeding, hygiene, sleep routines, and health observation." },
+        { name:"Babysitting / Nanny Service", price:3500, desc:"Supervision, safety, engagement, and daily care." },
+        { name:"Night Baby Care", price:5000, desc:"Overnight baby monitoring and feeding assistance." }
+    ],
+
+    /* 🤰 WOMEN CARE */
+    womenCare: [
+        { name:"Pregnancy Care at Home", price:6000, desc:"Monitoring and comfort care during pregnancy." },
+        { name:"Postnatal Mother Care", price:5000, desc:"Recovery assistance after delivery." },
+        { name:"Lactation Consultation", price:3000, desc:"Breastfeeding guidance and nutrition advice." }
+    ],
+
+    /* 👴 ELDER CARE */
+    elderCare: [
+        { name:"Elder Nursing Care", price:5000, desc:"Medication, vitals, and wound care." },
+        { name:"24/7 Elder Care Attendant", price:8000, desc:"Round-the-clock senior support." },
+        { name:"Dementia Care", price:7000, desc:"Specialized memory care support." }
+    ],
+
+    /* 🩺 GENERAL MEDICAL */
+    medicalCare: [
+        { name:"Home Nursing Care", price:4500, desc:"Skilled nursing care at home." },
+        { name:"Injection & IV Services", price:2000, desc:"Safe administration of injections and IV fluids." },
+        { name:"Wound Dressing Care", price:2500, desc:"Professional wound cleaning and dressing." }
+    ],
+
+    /* 👨‍⚕️ DOCTOR & DIAGNOSTICS */
+    diagnosticCare: [
+        { name:"Home Doctor Visit", price:2500, desc:"Qualified doctor consultation at home." },
+        { name:"Blood Sample Collection", price:1500, desc:"Lab sample collection from home." },
+        { name:"ECG at Home", price:2000, desc:"Heart monitoring test at home." }
+    ],
+
+    /* 🧰 MEDICAL EQUIPMENT */
+    equipmentCare: [
+        { name:"Oxygen Cylinder Rental", price:3000, desc:"Medical oxygen support at home." },
+        { name:"Wheelchair Rental", price:1500, desc:"Mobility assistance equipment." },
+        { name:"Hospital Bed Rental", price:5000, desc:"Adjustable bed for home patients." }
+    ],
+
+    /* 🏃 THERAPY & REHABILITATION */
+    therapyCare: [
+        { name:"Physiotherapy at Home", price:3000, desc:"Pain relief and mobility therapy." },
+        { name:"Post-Surgery Rehabilitation", price:6500, desc:"Recovery support after surgery." },
+        { name:"Speech Therapy", price:4000, desc:"Speech improvement sessions." }
+    ]
+};
+
+/* ---------- LOAD ALL SERVICES ---------- */
+function loadServices(){
+    renderCategory(servicesData.childCare, childCareList, "childCare");
+    renderCategory(servicesData.womenCare, womenCareList, "womenCare");
+    renderCategory(servicesData.elderCare, elderCareList, "elderCare");
+    renderCategory(servicesData.medicalCare, medicalCareList, "medicalCare");
+    renderCategory(servicesData.diagnosticCare, diagnosticCareList, "diagnosticCare");
+    renderCategory(servicesData.equipmentCare, equipmentCareList, "equipmentCare");
+    renderCategory(servicesData.therapyCare, therapyCareList, "therapyCare");
+}
+
+/* ---------- RENDER ---------- */
+function renderCategory(category, element, type){
+    element.innerHTML = "";
+    category.forEach((service, index)=>{
+        const li = document.createElement("li");
+        li.innerHTML = `
+            <div>
+                <span>${service.name} – ₹${service.price}</span>
+                <div class="service-desc">${service.desc}</div>
+            </div>
+            <button onclick="bookService('${type}', ${index})">Book</button>
+        `;
+        element.appendChild(li);
+    });
+}
+
+/* ---------- BOOK ---------- */
+function bookService(type, index){
+    const service = servicesData[type][index];
+
+    fetch("/book-service", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            name: service.name,
+            phone: "N/A",
+            service: service.name,
+            date: new Date().toISOString().split("T")[0],
+            doctor: "Assigned Soon"
+        })
+    })
+    .then(res => res.json())
+    .then(data => alert(data.message))
+    .catch(() => alert("Booking failed"));
+}
+
+window.onload = loadServices;
+
+
+</script>

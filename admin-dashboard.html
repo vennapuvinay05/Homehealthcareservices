@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
+
+<style>
+body{
+    margin:0;
+    padding:40px;
+    font-family:Arial, sans-serif;
+    background:linear-gradient(135deg,#eef2ff,#f9fbff);
+}
+h1{
+    text-align:center;
+    margin-bottom:40px;
+}
+.dashboard{
+    display:flex;
+    gap:30px;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+.card{
+    width:300px;
+    background:white;
+    border-radius:16px;
+    padding:25px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.15);
+}
+.card h2{
+    margin-bottom:15px;
+    color:#1e3c72;
+}
+
+.Admin{
+    display:flex;
+    justify-content:center;
+    margin-top:30px;
+}
+
+.Admin button,
+.logout{
+    background:linear-gradient(135deg,#1e3c72,#2a5298);
+    color:white;
+    padding:12px 28px;
+    font-size:16px;
+    font-weight:bold;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    box-shadow:0 8px 18px rgba(0,0,0,0.25);
+    transition:all .3s;
+}
+
+.Admin button:hover,
+.logout:hover{
+    transform:scale(1.08);
+}
+
+.logout{
+    display:block;
+    margin:25px auto;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Admin Dashboard</h1>
+
+<div class="dashboard">
+
+<div class="card">
+  <h2>Customer Details</h2>
+  <ul id="customers"></ul>
+</div>
+
+<div class="card">
+  <h2>Doctor Availability</h2>
+</div>
+
+<div class="card">
+  <h2>Feedback</h2>
+</div>
+
+</div>
+
+<div class="Admin">
+    <a href="/admin"><button>Admin Panel</button></a>
+</div>
+
+<button class="logout" onclick="logout()">Logout</button>
+
+<script>
+// ---- PROTECT PAGE ----
+if (localStorage.getItem("role") !== "admin") {
+    window.location.href = "/login";   // <-- NOT register
+}
+
+// sample demo data
+const customers = document.getElementById("customers");
+customers.innerHTML += "<li>Customer 1</li>";
+customers.innerHTML += "<li>Customer 2</li>";
+customers.innerHTML += "<li>Customer 3</li>";
+
+function logout(){
+    localStorage.clear();
+    window.location.href="/login";
+}
+</script>
+
+</body>
+</html>
